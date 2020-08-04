@@ -20,6 +20,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="doc\Text.txt" />
+    <Text Include="doc\readme.txt" />
   </ItemGroup>
 </Project>
