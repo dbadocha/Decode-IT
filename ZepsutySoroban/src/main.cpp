@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cmath>
 
 typedef unsigned int uint;
 
@@ -16,8 +17,9 @@ int main()
 		magicValue -= tmp;
 		ret *= tmp;
 	}
-	ret *= columns * 2;
+
+	ret *=  pow(2, columns);
 	std::cout << ret;
 	getchar();
-	return ret;
+	return 0;
 }
