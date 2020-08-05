@@ -6,8 +6,8 @@
 typedef unsigned int uint;
 
 uint subtrValues(uint value);
-uint DigToInt_Inc(std::multiset<uint> &vault);
-uint DigToInt_Dec(std::multiset<uint> &vault);
+uint DigToInt_Max(std::multiset<uint> &vault);
+uint DigToInt_Min(std::multiset<uint> &vault);
 std::multiset<uint> IntToDig(uint value);
 bool valueTest(uint value);
 
@@ -29,14 +29,10 @@ int main()
 				value = subtrValues(value);
 				++ret;
 			}
-			solution.push_back(ret);
+			std::cout << ret << "\n";
 		}
 		else
-			solution.push_back(-1);
-	}
-	for (std::vector<int>::iterator it = solution.begin(); it != solution.end(); ++it)
-	{
-		std::cout << (*it) << '\n';
+			std::cout << -1 << '\n';
 	}
 	return 0;
 }
@@ -44,8 +40,8 @@ int main()
 uint subtrValues(uint value)
 {
 	std::multiset<uint> digitsVault = IntToDig(value);
-	uint v2 = DigToInt_Dec(digitsVault);
-	uint v1 = DigToInt_Inc(digitsVault);
+	uint v2 = DigToInt_Min(digitsVault);
+	uint v1 = DigToInt_Max(digitsVault);
 	return v1 - v2;
 }
 
@@ -54,6 +50,10 @@ bool valueTest(uint value)
 	uint digits = 4;
 	std::set<uint> set;
 	uint digit = 0;
+
+	if (value > 9999 || value < 1000)
+		return false;
+
 	for (int i = digits - 1; i >= 0; --i)
 	{
 		digit = trunc(value / pow(10, i));
@@ -63,7 +63,7 @@ bool valueTest(uint value)
 	return (set.size() > 1);
 }
 
-uint DigToInt_Inc(std::multiset<uint> &vault)
+uint DigToInt_Max(std::multiset<uint> &vault)
 {
 	uint ret = 0;
 	std::multiset<uint>::iterator it;
@@ -77,7 +77,7 @@ uint DigToInt_Inc(std::multiset<uint> &vault)
 	return ret;
 }
 
-uint DigToInt_Dec(std::multiset<uint> &vault)
+uint DigToInt_Min(std::multiset<uint> &vault)
 {
 	uint ret = 0, tmp = 0;
 	std::multiset<uint>::reverse_iterator  rit;
