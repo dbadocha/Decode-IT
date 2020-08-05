@@ -23,8 +23,8 @@ Oczywiœcie sam sobie z tym nie poradzi, wiêc pomó¿ mu to zrobiæ, zanim Leon stra
 
 DANE WEJŒCIOWE
 Ka¿dy zestaw danych zawiera dwie dodatnie liczby naturalne r oraz s podane w jednym wierszu i rozdzielone spacj¹:
-1 < r < 8  – liczba kolumn liczyd³a,
-0 < s < 4r – liczba koralików, które Johnny znalaz³ i chce umieœciæ poni¿ej dolnej belki liczyd³a.
+1 <= r <= 8  – liczba kolumn liczyd³a,
+0 <= s <= 4r – liczba koralików, które Johnny znalaz³ i chce umieœciæ poni¿ej dolnej belki liczyd³a.
 
 DANE WYJŒCIOWE
 Wypisz jedn¹ wartoœæ – najwiêksz¹ liczbê poprawnych liczb, jaki mo¿na reprezentowaæ na zepsutym Sorobanie po naprawach.
