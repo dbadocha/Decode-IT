@@ -3,16 +3,26 @@
 #include <vector>
 #include <string>
 
-struct request;
-request getRequest();
+#define DEBUG
+
+struct Request;
+struct IPconnections;
+std::vector<Request> collectRequests();
 std::vector<int> getIP();
 std::vector<int> stringToIntIP(std::string &ipString);
+std::string intToStringIP(std::vector<int> &ipString);
 
-struct request
+struct Request
 {
 	char reqType;
 	std::vector<int> IP1;
 	std::vector<int> IP2;
+};
+
+struct IPconnections
+{
+	std::vector<int> IP;
+	std::vector<IPconnections> connections;
 };
 
 struct link
@@ -23,25 +33,44 @@ struct link
 
 int main()
 {
-	std::vector<request> requests = {};
+	std::vector<Request> requests = {};
 	std::vector<link> links = {};
 
-	std::vector<int> test = std::move(getIP());
-	for (int i : test)
+	requests = std::move(collectRequests());
+
+#ifdef DEBUG
+	for (auto r : requests)
 	{
-		std::cout << i << ' ';
+		std::cout << "type: " << r.reqType;
+		std::cout << " IP1: " << intToStringIP(r.IP1);
+		std::cout << " IP2: " << intToStringIP(r.IP2);
 	}
+	std::cout << '\n';
+#endif
+
+
 
 	return 0;
 }
 
-request getRequest()
+std::vector<Request> collectRequests()
 {
-	request ret = {};
-	std::cin >> ret.reqType;
-	ret.IP1 = std::move(getIP());
-	ret.IP2 = std::move(getIP());
-	return request();
+	std::vector<Request> ret = {};
+	Request req = {};
+	char type = {};
+	std::cin >> type;
+
+	while (type != 'E')
+	{
+		req = {};
+		req.reqType = type;
+		req.IP1 = std::move(getIP());
+		req.IP2 = std::move(getIP());
+		ret.push_back(req);
+		std::cin >> type;
+	}
+
+	return ret;
 }
 
 std::vector<int> getIP()
@@ -72,5 +101,18 @@ std::vector<int> stringToIntIP(std::string & ipString)
 		retIParray.push_back(tempIPint);
 	}
 	return retIParray;
+}
+
+std::string intToStringIP(std::vector<int>& IP)
+{
+	std::string ret = {};
+
+	for (auto it = IP.begin(); it != IP.end(); ++it)
+	{
+		ret += std::to_string(*it);
+		if (it != IP.end() - 1)
+			ret += ".";
+	}
+	return ret;
 }
 
