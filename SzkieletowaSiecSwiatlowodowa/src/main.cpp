@@ -1,5 +1,6 @@
 #include "requests.h"
 #include "ipConverter.h"
+#include "ipConnections.h"
 
 #include <iostream>
 #include <vector>
@@ -14,15 +15,15 @@ struct IPconnections;
 int main()
 {
 	std::vector<Request> requests = std::move(collectRequests());
-	std::set<IPconnections> links = {};
+	//std::set<IPconnections> links = {};
 
 
 #ifdef DEBUG
 	for (auto r : requests)
 	{
 		std::cout << "type: " << r.reqType;
-		std::cout << " IP1: " << intToStringIP(r.IP1);
-		std::cout << " IP2: " << intToStringIP(r.IP2);
+		std::cout << " IP1: " << intToStringIP(r.ip1);
+		std::cout << " IP2: " << intToStringIP(r.ip2);
 	}
 	std::cout << '\n';
 #endif

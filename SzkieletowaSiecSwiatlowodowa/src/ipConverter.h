@@ -2,5 +2,5 @@
 #include <vector>
 #include <string>
 
-std::vector<int> stringToIntIP(std::string &ipString);
-std::string intToStringIP(std::vector<int> &ipString);
+std::vector<int> stringToIntIP(const std::string &ipString);
+std::string intToStringIP(const std::vector<int> &ipString);

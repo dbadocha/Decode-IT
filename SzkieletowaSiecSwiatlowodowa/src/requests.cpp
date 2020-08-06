@@ -1,4 +1,6 @@
 #include "requests.h"
+#include "ipConverter.h"
+
 #include <iostream>
 
 std::vector<Request> collectRequests()
@@ -12,8 +14,8 @@ std::vector<Request> collectRequests()
 	{
 		req = {};
 		req.reqType = type;
-		req.IP1 = std::move(getIP());
-		req.IP2 = std::move(getIP());
+		req.ip1 = std::move(getIP());
+		req.ip2 = std::move(getIP());
 		ret.push_back(req);
 		std::cin >> type;
 	}
@@ -23,7 +25,7 @@ std::vector<Request> collectRequests()
 
 std::vector<int> getIP()
 {
-	std::string IP = {};
-	std::cin >> IP;
-	return stringToIntIP(IP);
+	std::string ip = {};
+	std::cin >> ip;
+	return stringToIntIP(ip);
 }

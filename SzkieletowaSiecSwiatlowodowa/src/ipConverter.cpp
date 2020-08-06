@@ -1,6 +1,6 @@
 #include "ipConverter.h"
 
-std::vector<int> stringToIntIP(std::string & ipString)
+std::vector<int> stringToIntIP(const std::string & ipString)
 {
 	std::vector<int> retIParray;
 
@@ -23,14 +23,14 @@ std::vector<int> stringToIntIP(std::string & ipString)
 	return retIParray;
 }
 
-std::string intToStringIP(std::vector<int>& IP)
+std::string intToStringIP(const std::vector<int> & ip)
 {
 	std::string ret = {};
 
-	for (auto it = IP.begin(); it != IP.end(); ++it)
+	for (auto it = ip.begin(); it != ip.end(); ++it)
 	{
 		ret += std::to_string(*it);
-		if (it != IP.end() - 1)
+		if (it != ip.end() - 1)
 			ret += ".";
 	}
 	return ret;
