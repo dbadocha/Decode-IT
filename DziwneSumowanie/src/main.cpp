@@ -62,7 +62,7 @@ std::vector<int> decodeToInt(std::vector<int>& digitStream)
 
 std::vector<char> decodeToASCII(std::vector<int>&& intStream)
 {
-	std::vector<int> tmpArray = intStream;
+	std::vector<int> tmpArray = std::move(intStream);
 	return decodeToASCII(tmpArray);
 }
 
