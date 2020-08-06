@@ -15,8 +15,7 @@ struct IPconnections;
 int main()
 {
 	std::vector<Request> requests = std::move(collectRequests());
-	//std::set<IPconnections> links = {};
-
+	connectionSet links = {};
 
 #ifdef DEBUG
 	for (auto r : requests)
@@ -28,6 +27,15 @@ int main()
 	std::cout << '\n';
 #endif
 
-
+	for (auto req : requests)
+	{
+		if (req.reqType == 'B')
+			links.addLink(req);
+#ifdef DEBUG
+		links.printConnections();
+#endif
+		//else if (req.reqType == 'T')
+		//in progress
+	}
 	return 0;
 }
