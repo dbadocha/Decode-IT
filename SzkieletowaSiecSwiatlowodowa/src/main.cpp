@@ -30,11 +30,11 @@ int main()
 	for (auto req : requests)
 	{
 		links.handleRequest(req);
-		//else if (req.reqType == 'T')
-		//in progress
 	}
 #ifdef DEBUG
+	std::cout << '\n';
 	links.printConnections();
+	std::cout << '\n';
 #endif
 	return 0;
 }

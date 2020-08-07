@@ -1,18 +1,15 @@
 #pragma once
 #include "requests.h"
-#include <vector>
+
 #include <set>
 #include <map>
-#include <algorithm>
 #include <memory>
 
-//extern struct Request;
 struct IP;
 typedef std::vector<int> ipAddress;
 typedef std::map<ipAddress, std::shared_ptr<IP>> ipMap;
 
 
-//prosi siê o klasê
 struct IP
 {
 	ipAddress _ip;
@@ -26,10 +23,12 @@ struct IP
 struct IPList
 {
 	ipMap _ipMap;
-	int handleRequest(Request &req);
+	int handleRequest(const Request &req);
 	std::shared_ptr<IP> addIP(const ipAddress &ip);
 	void printConnections();
 };
 
 int compareIP(const ipAddress &ip1, const ipAddress &ip2);
-int checkConnections(const ipAddress ip, std::set<IP> &checkedConnections);
+int checkConnection(const Request &req, const ipMap &ipMap);
+int checkNode(Request req, const ipMap &ipMap, std::set<ipAddress> &checkedConn);
+

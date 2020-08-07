@@ -42,30 +42,9 @@ int compareIP(const ipAddress& ip1, const ipAddress& ip2)
 	return 0;
 }
 
-
-///////////////////////////////in progress
-int checkConnections(const Request &req, const std::set<IP> &link, std::set<ipAddress> &checkedConnections)
+int IPList::handleRequest(const Request &req)
 {
-	std::set<ipAddress>::iterator it;
-	for (auto connection : link)
-	{
-		it = std::find(checkedConnections.begin(), checkedConnections.end(), req.ip1);
-		if (it == checkedConnections.end())
-			return 0;
-	}
-	
-	return 1;
-}
-
-int check(const Request &req, const std::set<IP> &links)
-{
-	std::set<ipAddress> checkedConnections = { req.ip1 };
-	return 1;// checkConnections(req, checkedConnections);
-}
-
-int IPList::handleRequest(Request &req)
-{
-	if (req.reqType = 'B')
+	if (req.reqType == 'B')
 	{
 		auto p1 = addIP(req.ip1);
 		auto p2 = addIP(req.ip2);
@@ -73,8 +52,17 @@ int IPList::handleRequest(Request &req)
 			return 1;
 		(*p1).connections[(*p2)._ip] = p2;
 		(*p2).connections[(*p1)._ip] = std::move(p1);
+		return 0;
 	}
-	return 0;
+	else if (req.reqType == 'T')
+	{
+		if (checkConnection(req, _ipMap))
+			std::cout << 'T';
+		else
+			std::cout << 'N';
+		return 0;
+	}
+	return 1;
 }
 
 std::shared_ptr<IP> IPList::addIP(const ipAddress & ip)
@@ -103,4 +91,41 @@ void IPList::printConnections()
 		}
 		std::cout << '\n';
 	}
+}
+
+int checkConnection(const Request &req, const ipMap &ipMap)
+{
+	if (req.ip1 == req.ip2)
+		return 1;
+
+	auto base = ipMap.find(req.ip1);
+	auto end = ipMap.find(req.ip2);
+
+	if (base == ipMap.end() && end == ipMap.end())
+		return 0;
+
+	std::set<ipAddress> checked = {};
+	return checkNode(req, ipMap, checked);
+}
+
+int checkNode(Request req, const ipMap &ipMap, std::set<ipAddress> &checkedConn)
+{
+	auto base = ipMap.find(req.ip1)->second;
+
+	if ((*base).connections.find(req.ip2) != (*base).connections.end())
+		return 1;
+
+	checkedConn.insert(base->_ip);
+
+	for (auto ip : (*base).connections)
+	{
+		auto nextIP = checkedConn.find(ip.first);
+		if (nextIP == checkedConn.end())
+		{
+			req.ip1 = (ip.first);
+			if (checkNode(req, ipMap, checkedConn) == 1)
+				return 1;
+		}
+	}
+	return 0;
 }
