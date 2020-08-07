@@ -31,7 +31,5 @@ struct IPList
 	void printConnections();
 };
 
-std::shared_ptr<IP> find(const ipAddress &ip, const ipMap &map);
-
 int compareIP(const ipAddress &ip1, const ipAddress &ip2);
 int checkConnections(const ipAddress ip, std::set<IP> &checkedConnections);

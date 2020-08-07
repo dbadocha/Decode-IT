@@ -30,11 +30,11 @@ int main()
 	for (auto req : requests)
 	{
 		links.handleRequest(req);
-#ifdef DEBUG
-		links.printConnections();
-#endif
 		//else if (req.reqType == 'T')
 		//in progress
 	}
+#ifdef DEBUG
+	links.printConnections();
+#endif
 	return 0;
 }

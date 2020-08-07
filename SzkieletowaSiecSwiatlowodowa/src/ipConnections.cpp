@@ -69,37 +69,38 @@ int IPList::handleRequest(Request &req)
 	{
 		auto p1 = addIP(req.ip1);
 		auto p2 = addIP(req.ip2);
+		if (p1 == p2)
+			return 1;
+		(*p1).connections[(*p2)._ip] = p2;
+		(*p2).connections[(*p1)._ip] = std::move(p1);
 	}
-
+	return 0;
 }
 
 std::shared_ptr<IP> IPList::addIP(const ipAddress & ip)
 {
 	auto it = _ipMap.find(ip);
 	if (it != _ipMap.end())
-		return std::move((*it).second);
+		return (*it).second;
 
 	IP tmpIP = {};
 	tmpIP._ip = ip;
+	tmpIP.connections = {};
 	auto ret = std::make_shared<IP>(tmpIP);
+	_ipMap[(*ret)._ip] = ret;
 	
 	return std::move(ret);
 }
 
-std::shared_ptr<IP> find(const ipAddress &ip, const ipMap &map)
-{
-	auto it = map.find(ip);
-	return std::move((*it).second);
-}
-
 void IPList::printConnections()
 {
-	for (auto con : _ipMap)
+	for (const auto con : _ipMap)
 	{
-		
 		std::cout << "ip: " << intToStringIP(con.first) << "\nCon: ";
 		for (auto ip : (*con.second).connections)
-			std::cout << intToStringIP(ip.first) << " ";
+		{
+			std::cout << intToStringIP(ip.first) << "\t";
+		}
 		std::cout << '\n';
 	}
 }
