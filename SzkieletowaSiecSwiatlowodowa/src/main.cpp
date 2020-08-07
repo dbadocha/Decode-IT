@@ -15,7 +15,7 @@ struct IPconnections;
 int main()
 {
 	std::vector<Request> requests = std::move(collectRequests());
-	connectionSet links = {};
+	IPList links = {};
 
 #ifdef DEBUG
 	for (auto r : requests)
@@ -29,8 +29,7 @@ int main()
 
 	for (auto req : requests)
 	{
-		if (req.reqType == 'B')
-			links.addLink(req);
+		links.handleRequest(req);
 #ifdef DEBUG
 		links.printConnections();
 #endif

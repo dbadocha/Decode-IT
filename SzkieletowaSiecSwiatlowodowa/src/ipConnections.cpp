@@ -63,46 +63,43 @@ int check(const Request &req, const std::set<IP> &links)
 	return 1;// checkConnections(req, checkedConnections);
 }
 
-//vector iterator - invalid
-int connectionSet::addLink(Request &req)
+int IPList::handleRequest(Request &req)
 {
-	auto it1 = find(req.ip1);
-	if (it1 == std::vector<IP>::iterator())
-		it1 = addIP(req.ip1);
-	auto it2 = find(req.ip2);
-	if (it2 == std::vector<IP>::iterator())
-		it2 = addIP(req.ip2);
-	(*it1).connections.insert(it2);
-	(*it2).connections.insert(it1);
-	return 0;
+	if (req.reqType = 'B')
+	{
+		auto p1 = addIP(req.ip1);
+		auto p2 = addIP(req.ip2);
+	}
+
 }
 
-std::vector<IP>::iterator connectionSet::addIP(const ipAddress & ip)
+std::shared_ptr<IP> IPList::addIP(const ipAddress & ip)
 {
+	auto it = _ipMap.find(ip);
+	if (it != _ipMap.end())
+		return std::move((*it).second);
+
 	IP tmpIP = {};
 	tmpIP._ip = ip;
-	links.push_back(tmpIP);
-	return --links.end();
+	auto ret = std::make_shared<IP>(tmpIP);
+	
+	return std::move(ret);
 }
 
-std::vector<IP>::iterator connectionSet::find(const ipAddress &ip)
+std::shared_ptr<IP> find(const ipAddress &ip, const ipMap &map)
 {
-	std::vector<IP>::iterator it;
-	for (it = links.begin(); it != links.end(); ++it)
-	{
-		if ((*it) == ip)
-			return it;
-	}
-	return std::vector<IP>::iterator();
+	auto it = map.find(ip);
+	return std::move((*it).second);
 }
 
-void connectionSet::printConnections()
+void IPList::printConnections()
 {
-	for (auto con : links)
+	for (auto con : _ipMap)
 	{
-		std::cout << "ip: " << intToStringIP(con._ip) << "\nCon: ";
-		for (auto ip : con.connections)
-			std::cout << intToStringIP((*ip)._ip) << " ";
+		
+		std::cout << "ip: " << intToStringIP(con.first) << "\nCon: ";
+		for (auto ip : (*con.second).connections)
+			std::cout << intToStringIP(ip.first) << " ";
 		std::cout << '\n';
 	}
 }
