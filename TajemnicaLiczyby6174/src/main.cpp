@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <cmath>
 
 typedef unsigned int uint;
 
@@ -29,10 +30,10 @@ int main()
 				value = subtrValues(value);
 				++ret;
 			}
-			std::cout << ret << "\n";
+			std::cout << '\n' << ret << '\n';
 		}
 		else
-			std::cout << -1 << '\n';
+			std::cout << '\n' << -1 << '\n';
 	}
 	return 0;
 }
