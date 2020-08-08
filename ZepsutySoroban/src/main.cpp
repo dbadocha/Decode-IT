@@ -20,6 +20,6 @@ int main()
 
 	ret *=  pow(2, columns);
 	std::cout << ret;
-	getchar();
+
 	return 0;
 }
