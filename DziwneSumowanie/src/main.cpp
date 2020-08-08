@@ -21,6 +21,7 @@ int main()
 
 		getDigitsStream(digitStream);
 		solution = decodeToASCII(decodeToInt(digitStream));
+		std::cout << '\n';
 		for (char c : solution)
 			std::cout << c;
 		std::cout << '\n';
@@ -30,15 +31,18 @@ int main()
 
 void getDigitsStream(std::vector<int>& digitStream)
 {
-	int digit = 0, streamSize = 0;
+	char digit = {};
+	int streamSize = 0;
 	std::cin >> streamSize;
 	streamSize *= 4;
 
 	for (int i = 0; i < streamSize; ++i)
 	{
 		std::cin >> digit;
-		digitStream.push_back(digit);
+		digitStream.push_back(digit - '0');
 	}
+	std::cin.clear();
+	fflush(stdin);
 	return;
 }
 
