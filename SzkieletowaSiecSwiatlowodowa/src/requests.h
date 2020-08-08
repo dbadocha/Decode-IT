@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 
 struct Request
 {
@@ -9,4 +10,5 @@ struct Request
 };
 
 std::vector<Request> collectRequests();
-std::vector<int> getIP();
+Request reqLineToRequest(std::string reqLine);
+std::vector<std::string> splitRequestLine(std::string reqLine);

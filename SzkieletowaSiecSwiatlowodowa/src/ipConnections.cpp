@@ -45,25 +45,33 @@ int compareIP(const ipAddress& ip1, const ipAddress& ip2)
 int IPList::handleRequest(const Request &req)
 {
 	if (req.reqType == 'B')
-	{
-		auto p1 = addIP(req.ip1);
-		auto p2 = addIP(req.ip2);
-		if (p1 == p2)
-			return 1;
-		(*p1).connections[(*p2)._ip] = p2;
-		(*p2).connections[(*p1)._ip] = std::move(p1);
-		return 0;
-	}
+		return reqB(req);
 	else if (req.reqType == 'T')
-	{
-		if (checkConnection(req, _ipMap))
-			std::cout << 'T';
-		else
-			std::cout << 'N';
-		return 0;
-	}
+		return reqT(req);
 	return 1;
 }
+
+int IPList::reqB(const Request & req)
+{
+	auto p1 = addIP(req.ip1);
+	auto p2 = addIP(req.ip2);
+	if (p1 == p2)
+		return 1;
+	(*p1).connections[(*p2)._ip] = p2;
+	(*p2).connections[(*p1)._ip] = std::move(p1);
+	return 0;
+}
+
+int IPList::reqT(const Request & req)
+{
+	if (checkConnection(req, _ipMap))
+		std::cout << 'T' << '\n';
+	else
+		std::cout << 'N' << '\n';
+	return 0;
+}
+
+
 
 std::shared_ptr<IP> IPList::addIP(const ipAddress & ip)
 {

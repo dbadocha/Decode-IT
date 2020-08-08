@@ -24,6 +24,8 @@ struct IPList
 {
 	ipMap _ipMap;
 	int handleRequest(const Request &req);
+	int reqB(const Request &req);
+	int reqT(const Request &req);
 	std::shared_ptr<IP> addIP(const ipAddress &ip);
 	void printConnections();
 };
