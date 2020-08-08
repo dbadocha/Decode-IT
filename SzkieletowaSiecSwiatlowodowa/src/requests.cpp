@@ -8,16 +8,14 @@ std::vector<Request> collectRequests()
 	std::vector<Request> ret = {};
 	Request req = {};
 	char type = {};
-	std::cin >> type;
 
-	while (type != 'E')
+	while (std::cin >> type)
 	{
 		req = {};
 		req.reqType = type;
 		req.ip1 = std::move(getIP());
 		req.ip2 = std::move(getIP());
 		ret.push_back(req);
-		std::cin >> type;
 	}
 
 	return ret;
