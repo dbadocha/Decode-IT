@@ -9,7 +9,7 @@ std::vector<Request> collectRequests()
 	Request req = {};
 	std::string reqLine = {};
 
-	while(std::getline(std::cin, reqLine))
+	while(std::getline(std::cin, reqLine) && !std::cin.eof())
 	{
 		ret.push_back(reqLineToRequest(reqLine));
 	}
