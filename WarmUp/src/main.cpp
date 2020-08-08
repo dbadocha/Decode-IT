@@ -9,7 +9,7 @@ int main()
 
 	uint squareMeters = 0, maxLoad = 0, bagMass = 0;
 	uint totalMass = 0;
-	
+
 	for (int i = 0; i < testsAmount; ++i)
 	{
 		std::cin >> squareMeters >> maxLoad >> bagMass;
