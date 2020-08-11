@@ -127,10 +127,10 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="scr\main.cpp" />
-    <ClCompile Include="SocialNetwork.cpp" />
+    <ClCompile Include="scr\SocialNetwork.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SocialNetwork.h" />
+    <ClInclude Include="scr\SocialNetwork.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

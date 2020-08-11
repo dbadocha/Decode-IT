@@ -21,12 +21,12 @@
     <ClCompile Include="scr\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="SocialNetwork.cpp">
+    <ClCompile Include="scr\SocialNetwork.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="SocialNetwork.h">
+    <ClInclude Include="scr\SocialNetwork.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
