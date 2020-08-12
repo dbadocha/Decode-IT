@@ -1,9 +1,9 @@
 #include "SocialNetwork.h"
 #include <iostream>
 
-Actor::Actor(std::string name, unsigned int takeOverCost)
+Actor::Actor(std::string name, unsigned int takeoverCost)
 	:
-	_name(name), _takeOverCost(takeOverCost)
+	_name(name), _takeoverCost(takeoverCost)
 {
 }
 
@@ -12,9 +12,9 @@ std::string Actor::getName()
 	return _name;
 }
 
-unsigned int Actor::getTakeOverCost()
+unsigned int Actor::gettakeoverCost()
 {
-	return _takeOverCost;
+	return _takeoverCost;
 }
 
 int Actor::addRelation(const std::shared_ptr<Actor> &relation)
@@ -31,15 +31,20 @@ int Actor::addRelation(const std::shared_ptr<Actor> &relation)
 	return 0;
 }
 
+bool Actor::operator<(const Actor & rhs) const
+{
+	return _takeoverCost < rhs._takeoverCost;
+}
+
 SocialNetwork::SocialNetwork(std::map<std::string, std::shared_ptr<Actor>>&& socialNetwork)
 	:
 	_socialNetwork(std::move(socialNetwork))
 {
 }
 
-int SocialNetwork::addActor(const std::string name, const unsigned int takeOverCost)
+int SocialNetwork::addActor(const std::string name, const unsigned int takeoverCost)
 {
-	Actor newActor(name, takeOverCost);
+	Actor newActor(name, takeoverCost);
 	_socialNetwork.emplace(name, std::make_shared<Actor>(newActor));
 	return 0;
 }
@@ -72,11 +77,11 @@ std::map<std::string, std::shared_ptr<Actor>>&& SocialNetworkCreator::createFrom
 int SocialNetworkCreator::addActors(int amountOfActors)
 {
 	std::string name = {};
-	unsigned int takeOverCost = 0;
+	unsigned int takeoverCost = 0;
 	for (int i = 0; i < amountOfActors; ++i)
 	{
-		std::cin >> name >> takeOverCost;
-		_socialNetwork.emplace(name, std::make_shared<Actor>(name, takeOverCost));
+		std::cin >> name >> takeoverCost;
+		_socialNetwork.emplace(name, std::make_shared<Actor>(name, takeoverCost));
 	}
 	return 0;
 }
