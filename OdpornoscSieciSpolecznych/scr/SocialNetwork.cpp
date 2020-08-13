@@ -1,5 +1,6 @@
 #include "SocialNetwork.h"
 #include <iostream>
+#include <algorithm>
 
 Actor::Actor(std::string name, unsigned int takeoverCost)
 	:
@@ -17,7 +18,7 @@ unsigned int Actor::gettakeoverCost()
 	return _takeoverCost;
 }
 
-int Actor::addRelation(const std::shared_ptr<Actor> &relation)
+int Actor::addRelation(const ActorsPointer &relation)
 {
 	std::string relationName = relation->getName();
 
@@ -36,7 +37,12 @@ bool Actor::operator<(const Actor & rhs) const
 	return _takeoverCost < rhs._takeoverCost;
 }
 
-SocialNetwork::SocialNetwork(std::map<std::string, std::shared_ptr<Actor>>&& socialNetwork)
+const std::vector<ActorsPointer> Actor::getNetwork()
+{
+	return _actorsSocialNetwork;
+}
+
+SocialNetwork::SocialNetwork(ActorsMap &&socialNetwork)
 	:
 	_socialNetwork(std::move(socialNetwork))
 {
@@ -49,22 +55,22 @@ int SocialNetwork::addActor(const std::string name, const unsigned int takeoverC
 	return 0;
 }
 
-int SocialNetwork::addActor(const std::shared_ptr<Actor> actor)
+int SocialNetwork::addActor(const ActorsPointer actor)
 {
 	_socialNetwork.emplace(actor->getName(), actor);
 	return 0;
 }
 
-const std::shared_ptr<Actor> SocialNetwork::findActor(std::string name)
+const ActorsPointer SocialNetwork::findActor(std::string name)
 {
 	auto it = _socialNetwork.find(name);
 	if (it != _socialNetwork.end())
 		return it->second;
 
-	return std::shared_ptr<Actor>();
+	return ActorsPointer();
 }
 
-std::map<std::string, std::shared_ptr<Actor>>&& SocialNetworkCreator::createFromStdin()
+ActorsMap && SocialNetworkCreator::createFromStdin()
 {
 	unsigned int recordsAmount = 0;
 	std::cin >> recordsAmount;
