@@ -13,7 +13,6 @@ public:
 	bool isMax();
 	Bitset operator^ (const Bitset &rhs) const;
 	Bitset operator| (const Bitset &rhs) const;
-	bool operator[] (unsigned int bitPos);
 
 private:
 	int posInContainer(unsigned int bitPos);

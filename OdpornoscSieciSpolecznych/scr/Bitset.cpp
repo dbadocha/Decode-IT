@@ -84,3 +84,5 @@ int Bitset::posInContainer(unsigned int bitPos)
 	else
 		return -1;
 }
+
+
