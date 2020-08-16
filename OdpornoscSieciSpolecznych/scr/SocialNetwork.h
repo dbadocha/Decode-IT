@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <set>
 #include <map>
 #include <memory>
 
@@ -15,6 +16,7 @@ public:
 	~Actor() = default;
 	std::string getName();
 	unsigned int gettakeoverCost();
+	bool hasRelation(std::string name);
 	int addRelation(const ActorsPointer &relation);
 	bool operator< (const Actor &rhs) const;
 	const std::vector<ActorsPointer> getNetwork();
@@ -49,4 +51,31 @@ private:
 	ActorsMap _socialNetwork;
 	int addActors(int amountOfActors);
 	int addRelations(int amountOfRelations);
+};
+
+
+struct TakeoverList
+{
+	std::set<std::string> names;
+	int takeoverCost;
+};
+
+class TakeoverStrategy
+{
+public:
+	TakeoverStrategy(const ActorsMap &socialNetwork);
+	virtual ~TakeoverStrategy() = default;
+	virtual TakeoverList findSolution() = 0;
+protected:
+	const ActorsMap _socialNetwork;
+};
+
+class TakeoverStrategy_MapsProduct : public TakeoverStrategy
+{
+public:
+	TakeoverStrategy_MapsProduct(const ActorsMap &socialNetwork);
+	TakeoverList findSolution() override;
+//private:
+	TakeoverList checkNode(TakeoverList list, ActorsPointer &actor);
+	std::vector<ActorsPointer> findDiscrepancy(const TakeoverList &list, const ActorsPointer &baseActor);
 };
