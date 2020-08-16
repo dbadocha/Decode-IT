@@ -7,7 +7,10 @@
 
 class Actor;
 typedef std::shared_ptr<Actor> ActorsPointer;
+typedef std::set<ActorsPointer> ActorsPointerList;
 typedef std::map<std::string, ActorsPointer> ActorsMap;
+
+ActorsPointerList operator+ (const ActorsPointerList &lhs, const ActorsPointerList &rhs);
 
 class Actor
 {
@@ -15,16 +18,17 @@ public:
 	Actor(const std::string name, const unsigned int takeoverCost);
 	~Actor() = default;
 	std::string getName();
-	unsigned int gettakeoverCost();
+	unsigned int getTakeoverCost();
 	bool hasRelation(std::string name);
 	int addRelation(const ActorsPointer &relation);
 	bool operator< (const Actor &rhs) const;
-	const std::vector<ActorsPointer> getNetwork();
+	Actor operator+ (const Actor &rhs) const;
+	const ActorsPointerList getNetwork();
 
 private:
 	const std::string _name;
 	const unsigned int _takeoverCost;
-	std::vector<ActorsPointer> _actorsSocialNetwork;
+	ActorsPointerList _actorsSocialNetwork;
 };
 
 class SocialNetwork
@@ -57,6 +61,7 @@ private:
 struct TakeoverList
 {
 	std::set<std::string> names;
+	ActorsPointerList tookover;
 	int takeoverCost;
 };
 
@@ -76,6 +81,6 @@ public:
 	TakeoverStrategy_MapsProduct(const ActorsMap &socialNetwork);
 	TakeoverList findSolution() override;
 //private:
-	TakeoverList checkNode(TakeoverList list, ActorsPointer &actor);
-	std::vector<ActorsPointer> findDiscrepancy(const TakeoverList &list, const ActorsPointer &baseActor);
+	TakeoverList checkNode(TakeoverList &list);
+	ActorsPointerList findDiscrepancy(const TakeoverList &list);
 };

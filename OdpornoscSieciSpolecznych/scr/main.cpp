@@ -11,7 +11,7 @@ int main()
 	ActorsMap map = create.createFromStdin();
 	TakeoverStrategy_MapsProduct str(map);
 	TakeoverList list = {};
-	str.findDiscrepancy(list, map.begin()->second);
+	str.findDiscrepancy(list);
 
 	return 0;
 }

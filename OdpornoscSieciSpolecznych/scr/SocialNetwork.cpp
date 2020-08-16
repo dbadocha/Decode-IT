@@ -13,7 +13,7 @@ std::string Actor::getName()
 	return _name;
 }
 
-unsigned int Actor::gettakeoverCost()
+unsigned int Actor::getTakeoverCost()
 {
 	return _takeoverCost;
 }
@@ -41,7 +41,7 @@ int Actor::addRelation(const ActorsPointer &relation)
 			return 1;
 	}
 
-	_actorsSocialNetwork.push_back(relation);
+	_actorsSocialNetwork.insert(relation);
 	return 0;
 }
 
@@ -50,7 +50,16 @@ bool Actor::operator<(const Actor & rhs) const
 	return _takeoverCost < rhs._takeoverCost;
 }
 
-const std::vector<ActorsPointer> Actor::getNetwork()
+Actor Actor::operator+(const Actor & rhs) const
+{
+	std::string name = _name + rhs._name.substr(0, 1);
+	auto newTakeoverCost = _takeoverCost + rhs._takeoverCost;
+	Actor newActor(name, newTakeoverCost);
+	newActor._actorsSocialNetwork = std::move(_actorsSocialNetwork + rhs._actorsSocialNetwork);
+	return newActor;
+}
+
+const ActorsPointerList Actor::getNetwork()
 {
 	return _actorsSocialNetwork;
 }
@@ -65,12 +74,16 @@ int SocialNetwork::addActor(const std::string name, const unsigned int takeoverC
 {
 	Actor newActor(name, takeoverCost);
 	_socialNetwork.emplace(name, std::make_shared<Actor>(newActor));
+
+	auto actor = _socialNetwork.find(name);
+	(actor->second)->addRelation(actor->second);
 	return 0;
 }
 
 int SocialNetwork::addActor(const ActorsPointer actor)
 {
 	_socialNetwork.emplace(actor->getName(), actor);
+	actor->addRelation(actor);
 	return 0;
 }
 
@@ -79,7 +92,6 @@ const ActorsPointer SocialNetwork::findActor(std::string name)
 	auto it = _socialNetwork.find(name);
 	if (it != _socialNetwork.end())
 		return it->second;
-
 	return ActorsPointer();
 }
 
@@ -133,19 +145,22 @@ TakeoverList TakeoverStrategy_MapsProduct::findSolution()
 	return ret;
 }
 
-TakeoverList TakeoverStrategy_MapsProduct::checkNode(TakeoverList list, ActorsPointer &actor)
+TakeoverList TakeoverStrategy_MapsProduct::checkNode(TakeoverList &list)
 {
-	list.names.insert(actor->getName());
-	list.takeoverCost += actor->gettakeoverCost();
-	std::vector<ActorsPointer> nextActors = findDiscrepancy(list, actor);
-
+	ActorsPointerList nextActors = findDiscrepancy(list);
 	if (nextActors.size() == 0)
 		return list;
 
-	TakeoverList retSolution = {};
+
+	TakeoverList tmplist = {}, retSolution = {};
 	for (auto it : nextActors)
 	{
-		auto solution = checkNode(list, it);
+		tmplist = list;
+		tmplist.names.insert(it->getName());
+		tmplist.takeoverCost += it->getTakeoverCost();
+
+		auto solution = checkNode(list);
+
 		if (solution.takeoverCost < retSolution.takeoverCost || solution.takeoverCost == 0)
 		{
 			retSolution = solution;
@@ -154,14 +169,16 @@ TakeoverList TakeoverStrategy_MapsProduct::checkNode(TakeoverList list, ActorsPo
 	return retSolution;
 }
 
-std::vector<ActorsPointer> TakeoverStrategy_MapsProduct::findDiscrepancy(const TakeoverList &list, const ActorsPointer &baseActor)
+ActorsPointerList TakeoverStrategy_MapsProduct::findDiscrepancy(const TakeoverList &list)
 {
-	std::vector<ActorsPointer> nextActors = {};
-
+	ActorsPointerList nextActors = {};
 	for (auto it : _socialNetwork)
 	{
-		if (!baseActor->hasRelation(it.first))
-			nextActors.push_back(it.second);
+		if(list.tookover.find(it.second) == list.tookover.end())
+		{
+			nextActors = it.second->getNetwork();
+		}
+		
 	}
 	return nextActors;
 }
@@ -170,4 +187,11 @@ TakeoverStrategy::TakeoverStrategy(const ActorsMap &socialNetwork)
 	:
 	_socialNetwork(socialNetwork)
 {
+}
+
+ActorsPointerList operator+(const ActorsPointerList &lhs, const ActorsPointerList &rhs)
+{
+	ActorsPointerList newList = lhs;
+	newList.insert(rhs.begin(), rhs.end());
+	return newList;
 }
