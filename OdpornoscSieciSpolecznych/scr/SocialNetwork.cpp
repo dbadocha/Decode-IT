@@ -42,10 +42,10 @@ const std::vector<ActorsPointer> Actor::getNetwork()
 	return _actorsSocialNetwork;
 }
 
-SocialNetwork::SocialNetwork(ActorsMap &&socialNetwork)
-	:
-	_socialNetwork(std::move(socialNetwork))
+SocialNetwork::SocialNetwork()
 {
+	SocialNetworkCreator creator;
+	_socialNetwork = std::move(creator.createFromStdin());
 }
 
 int SocialNetwork::addActor(const std::string name, const unsigned int takeoverCost)

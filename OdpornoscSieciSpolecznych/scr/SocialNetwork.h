@@ -27,8 +27,7 @@ private:
 class SocialNetwork
 {
 public:
-	SocialNetwork() = default;
-	SocialNetwork(ActorsMap &&socialNetwork);
+	SocialNetwork();
 	~SocialNetwork() = default;
 	int addActor(const std::string name, const unsigned int takeoverCost);
 	int addActor(const ActorsPointer actor);

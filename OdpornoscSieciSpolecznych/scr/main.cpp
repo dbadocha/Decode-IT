@@ -1,9 +1,9 @@
 #include "SocialNetwork.h"
+#include <limits>
 
 
 int main()
 {
-	SocialNetworkCreator creator;
-	SocialNetwork socialNetwork = std::move(SocialNetwork(creator.createFromStdin()));
+	SocialNetwork socialNetwork;
 	return 0;
 }

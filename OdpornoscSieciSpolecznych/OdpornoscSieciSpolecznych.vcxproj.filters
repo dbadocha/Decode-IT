@@ -24,9 +24,15 @@
     <ClCompile Include="scr\SocialNetwork.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="scr\ActorStrategy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\SocialNetwork.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\ActorStrategy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
