@@ -126,12 +126,12 @@
     <Text Include="doc\readme.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="scr\ActorStrategy.cpp" />
+    <ClCompile Include="scr\Bitset.cpp" />
     <ClCompile Include="scr\main.cpp" />
     <ClCompile Include="scr\SocialNetwork.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="scr\ActorStrategy.h" />
+    <ClInclude Include="scr\Bitset.h" />
     <ClInclude Include="scr\SocialNetwork.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
