@@ -1,6 +1,5 @@
 #include "SocialNetwork.h"
 #include <iostream>
-#include <algorithm>
 
 Actor::Actor(std::string name, unsigned int takeoverCost)
 	:
@@ -50,7 +49,7 @@ bool Actor::operator<(const Actor & rhs) const
 	return _takeoverCost < rhs._takeoverCost;
 }
 
-Actor Actor::operator+(const Actor & rhs) const
+Actor &Actor::operator+(const Actor & rhs) const
 {
 	std::string name = _name + rhs._name.substr(0, 1);
 	auto newTakeoverCost = _takeoverCost + rhs._takeoverCost;
@@ -68,22 +67,21 @@ SocialNetwork::SocialNetwork()
 {
 	SocialNetworkCreator creator;
 	_socialNetwork = std::move(creator.createFromStdin());
+	_strategy = std::unique_ptr<TakeoverStrategy>(new TakeoverStrategy_MapsProduct(_socialNetwork));
 }
 
 int SocialNetwork::addActor(const std::string name, const unsigned int takeoverCost)
 {
-	Actor newActor(name, takeoverCost);
-	_socialNetwork.emplace(name, std::make_shared<Actor>(newActor));
-
-	auto actor = _socialNetwork.find(name);
-	(actor->second)->addRelation(actor->second);
+	std::shared_ptr<Actor> newActor = std::make_shared<Actor>(name, takeoverCost);
+	newActor->addRelation(newActor);
+	_socialNetwork.emplace(name, std::move(newActor));
 	return 0;
 }
 
 int SocialNetwork::addActor(const ActorsPointer actor)
 {
-	_socialNetwork.emplace(actor->getName(), actor);
 	actor->addRelation(actor);
+	_socialNetwork.emplace(actor->getName(), actor);
 	return 0;
 }
 
@@ -93,6 +91,11 @@ const ActorsPointer SocialNetwork::findActor(std::string name)
 	if (it != _socialNetwork.end())
 		return it->second;
 	return ActorsPointer();
+}
+
+void SocialNetwork::findSolution()
+{
+	_strategy->findSolution();
 }
 
 ActorsMap && SocialNetworkCreator::createFromStdin()
@@ -112,7 +115,9 @@ int SocialNetworkCreator::addActors(int amountOfActors)
 	for (int i = 0; i < amountOfActors; ++i)
 	{
 		std::cin >> name >> takeoverCost;
-		_socialNetwork.emplace(name, std::make_shared<Actor>(name, takeoverCost));
+		std::shared_ptr<Actor> newActor = std::make_shared<Actor>(name, takeoverCost);
+		newActor->addRelation(newActor);
+		_socialNetwork.emplace(name, std::move(newActor));
 	}
 	return 0;
 }
@@ -140,28 +145,40 @@ TakeoverStrategy_MapsProduct::TakeoverStrategy_MapsProduct(const ActorsMap & soc
 
 TakeoverList TakeoverStrategy_MapsProduct::findSolution()
 {
-	ActorsPointer nullActor = {};
-	TakeoverList ret = {};
-	return ret;
+	_solution = checkNode();
+	print();
+	return _solution;
 }
 
-TakeoverList TakeoverStrategy_MapsProduct::checkNode(TakeoverList &list)
+void TakeoverStrategy_MapsProduct::print()
+{
+	std::cout << '\n';
+	std::cout << _solution.names.size() << '\n';
+	for (auto name : _solution.names)
+	{
+		std::cout << name << '\n';
+	}
+	std::cout << _solution.takeoverCost << '\n';
+}
+
+TakeoverList TakeoverStrategy_MapsProduct::checkNode(TakeoverList list)
 {
 	ActorsPointerList nextActors = findDiscrepancy(list);
 	if (nextActors.size() == 0)
 		return list;
 
-
 	TakeoverList tmplist = {}, retSolution = {};
+
 	for (auto it : nextActors)
 	{
 		tmplist = list;
 		tmplist.names.insert(it->getName());
 		tmplist.takeoverCost += it->getTakeoverCost();
+		tmplist.tookover += it->getNetwork();
 
-		auto solution = checkNode(list);
+		auto solution = checkNode(tmplist);
 
-		if (solution.takeoverCost < retSolution.takeoverCost || solution.takeoverCost == 0)
+		if (solution.takeoverCost < retSolution.takeoverCost || retSolution.takeoverCost == 0)
 		{
 			retSolution = solution;
 		}
@@ -171,16 +188,14 @@ TakeoverList TakeoverStrategy_MapsProduct::checkNode(TakeoverList &list)
 
 ActorsPointerList TakeoverStrategy_MapsProduct::findDiscrepancy(const TakeoverList &list)
 {
-	ActorsPointerList nextActors = {};
 	for (auto it : _socialNetwork)
 	{
 		if(list.tookover.find(it.second) == list.tookover.end())
 		{
-			nextActors = it.second->getNetwork();
+			return it.second->getNetwork();
 		}
-		
 	}
-	return nextActors;
+	return ActorsPointerList();
 }
 
 TakeoverStrategy::TakeoverStrategy(const ActorsMap &socialNetwork)
@@ -189,9 +204,15 @@ TakeoverStrategy::TakeoverStrategy(const ActorsMap &socialNetwork)
 {
 }
 
-ActorsPointerList operator+(const ActorsPointerList &lhs, const ActorsPointerList &rhs)
+ActorsPointerList &operator+(const ActorsPointerList &lhs, const ActorsPointerList &rhs)
 {
 	ActorsPointerList newList = lhs;
 	newList.insert(rhs.begin(), rhs.end());
 	return newList;
+}
+
+ActorsPointerList &operator+=(ActorsPointerList &lhs, const ActorsPointerList &rhs)
+{
+	lhs.insert(rhs.begin(), rhs.end());
+	return lhs;
 }

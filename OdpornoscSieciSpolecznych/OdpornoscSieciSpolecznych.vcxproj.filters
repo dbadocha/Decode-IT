@@ -24,15 +24,9 @@
     <ClCompile Include="scr\SocialNetwork.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="scr\Bitset.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\SocialNetwork.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\Bitset.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
