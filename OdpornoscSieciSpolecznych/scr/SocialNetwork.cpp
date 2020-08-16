@@ -49,7 +49,7 @@ bool Actor::operator<(const Actor & rhs) const
 	return _takeoverCost < rhs._takeoverCost;
 }
 
-Actor &Actor::operator+(const Actor & rhs) const
+Actor Actor::operator+(const Actor & rhs) const
 {
 	std::string name = _name + rhs._name.substr(0, 1);
 	auto newTakeoverCost = _takeoverCost + rhs._takeoverCost;
@@ -204,7 +204,7 @@ TakeoverStrategy::TakeoverStrategy(const ActorsMap &socialNetwork)
 {
 }
 
-ActorsPointerList &operator+(const ActorsPointerList &lhs, const ActorsPointerList &rhs)
+ActorsPointerList operator+(const ActorsPointerList &lhs, const ActorsPointerList &rhs)
 {
 	ActorsPointerList newList = lhs;
 	newList.insert(rhs.begin(), rhs.end());

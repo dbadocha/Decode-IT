@@ -10,7 +10,7 @@ typedef std::shared_ptr<Actor> ActorsPointer;
 typedef std::set<ActorsPointer> ActorsPointerList;
 typedef std::map<std::string, ActorsPointer> ActorsMap;
 
-ActorsPointerList &operator+ (const ActorsPointerList &lhs, const ActorsPointerList &rhs);
+ActorsPointerList operator+ (const ActorsPointerList &lhs, const ActorsPointerList &rhs);
 ActorsPointerList &operator+= (ActorsPointerList &lhs, const ActorsPointerList &rhs);
 
 class Actor
@@ -23,7 +23,7 @@ public:
 	bool hasRelation(std::string name);
 	int addRelation(const ActorsPointer &relation);
 	bool operator< (const Actor &rhs) const;
-	Actor &operator+ (const Actor &rhs) const;
+	Actor operator+ (const Actor &rhs) const;
 	const ActorsPointerList getNetwork();
 
 private:
